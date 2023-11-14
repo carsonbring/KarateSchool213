@@ -35,6 +35,7 @@ namespace KarateSchool
                         var member = context.Members.SingleOrDefault(m => m.Member_UserID == user.UserID);
                         Session["FirstName"] = member.MemberFirstName;
                         Session["LastName"] = member.MemberLastName;
+                        Session["UserID"] = member.Member_UserID;
                         Response.Redirect("mywork/Member.aspx", true);
                     }
                     else if (user.UserType == "Instructor")
@@ -42,6 +43,7 @@ namespace KarateSchool
                         var instructor = context.Instructors.SingleOrDefault(i => i.InstructorID == user.UserID);
                         Session["FirstName"] = instructor.InstructorFirstName;
                         Session["LastName"] = instructor.InstructorLastName;
+                        Session["UserID"] = instructor.InstructorID;
                         Response.Redirect("mywork/Instructor.aspx", true);
                     }
                     else if (user.UserType == "Administrator")
