@@ -130,7 +130,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="logon.aspx" />
-    <Content Include="Administrator.aspx" />
+    <Content Include="mywork\Administrator.aspx" />
     <Content Include="mywork\Instructor.aspx" />
     <Content Include="mywork\Member.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -169,6 +169,7 @@
     <None Include="KarateSchool.dbml.layout">
       <DependentUpon>KarateSchool.dbml</DependentUpon>
     </None>
+    <Content Include="mywork\Web.config" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -241,11 +242,11 @@
     <Compile Include="logon.aspx.designer.cs">
       <DependentUpon>logon.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Administrator.aspx.cs">
+    <Compile Include="mywork\Administrator.aspx.cs">
       <DependentUpon>Administrator.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Administrator.aspx.designer.cs">
+    <Compile Include="mywork\Administrator.aspx.designer.cs">
       <DependentUpon>Administrator.aspx</DependentUpon>
     </Compile>
     <Compile Include="mywork\Instructor.aspx.cs">

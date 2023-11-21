@@ -11,21 +11,21 @@ namespace KarateSchool.mywork
 {
     public partial class Member : System.Web.UI.Page
     {
-
+        //Initializing connString and delcaring context
         string connString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\carso\\OneDrive\\Desktop\\KarateSchool213\\carson.bring_Assignment4\\KarateSchool\\App_Data\\KarateSchool.mdf;Integrated Security=True;Connect Timeout=30";
         KarateSchoolDataContext context;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-
+                //Displaying first and last name from session variables
                 context = new KarateSchoolDataContext(connString);
                 string firstname = Session["FirstName"] as string;
                 string lastname = Session["LastName"] as string;
                 int userid = Convert.ToInt32(Session["UserID"]);
 
                 Name.Text = firstname + " " + lastname;
-
+                //querying for Members section information to bind to the members grid view
                 var query = from section in context.Sections
                             join instructor in context.Instructors
                             on section.Instructor_ID equals instructor.InstructorID

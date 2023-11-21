@@ -9,20 +9,21 @@ namespace KarateSchool.mywork
 {
     public partial class Instructor : System.Web.UI.Page
     {
+        //Declaring context and initializing connString
         string connString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\carso\\OneDrive\\Desktop\\KarateSchool213\\carson.bring_Assignment4\\KarateSchool\\App_Data\\KarateSchool.mdf;Integrated Security=True;Connect Timeout=30";
         KarateSchoolDataContext context;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-
+                //Display first and last name from Session vars
                 context = new KarateSchoolDataContext(connString);
                 string firstname = Session["FirstName"] as string;
                 string lastname = Session["LastName"] as string;
                 int userid = Convert.ToInt32(Session["UserID"]);
 
                 Name.Text = firstname + " " + lastname;
-
+                //Query for the Instructors sessions to display in atable
                 var query = from section in context.Sections
                             join member in context.Members
                             on section.Member_ID equals member.Member_UserID
