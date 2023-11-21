@@ -11,6 +11,7 @@ namespace KarateSchool
 {
     public partial class Administrator : System.Web.UI.Page
     {
+        //initializing connection string
         string connString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\carso\\OneDrive\\Desktop\\KarateSchool213\\carson.bring_Assignment4\\KarateSchool\\App_Data\\KarateSchool.mdf;Integrated Security=True;Connect Timeout=30";
         
         KarateSchoolDataContext context;
@@ -35,6 +36,7 @@ namespace KarateSchool
                 var members = from m in dbContext.Members
                               select new
                               {
+                                  m.Member_UserID,
                                   m.MemberFirstName,
                                   m.MemberLastName,
                                   m.MemberPhoneNumber,
@@ -45,7 +47,32 @@ namespace KarateSchool
                 GridView3.DataBind();
             }
         }
+        private void ClearAddMember()
+        {
+            MemFirstName.Text = "";
+            MemLastName.Text = "";
+            MemPhone.Text = "";
+            MemEmail.Text = "";
+            MemUsername.Text = "";
+            MemPassword.Text = "";
 
+        }
+        private void ClearAddInstructor()
+        {
+            InstFirst.Text = "";
+            InstLast.Text = "";
+            InstPassword.Text = "";
+            InstPhone.Text = "";
+            InstUsername.Text = "";
+            
+
+        }
+        private void ClearAssign()
+        {
+            assignInstructorId.Text = "";
+            assignMemId.Text = "";
+            SectionFee.Text = "";
+        }
         // load instructors into GridView 
         private void LoadInstructors()
         {
@@ -54,6 +81,7 @@ namespace KarateSchool
                 var instructors = from i in dbContext.Instructors
                                   select new
                                   {
+                                      i.InstructorID,
                                       i.InstructorFirstName,
                                       i.InstructorLastName,
                                 
@@ -69,20 +97,31 @@ namespace KarateSchool
         protected void btnAddMember_Click(object sender, EventArgs e)
         {
            
-            int userId= Convert.ToInt32(MemID.Text.Trim());
+      
             string firstname = MemFirstName.Text.Trim();
             string lastname = MemLastName.Text.Trim();
             DateTime today = DateTime.Now;
             string phonenumber = MemPhone.Text.Trim();
             string email = MemEmail.Text.Trim();
-
+            string username = MemUsername.Text.Trim();
+            string password = MemPassword.Text.Trim();
 
             
             using (context = new KarateSchoolDataContext(connString))
             {
+                NetUser user = new NetUser
+                {
+                    UserName = username,
+                    UserPassword = password,
+                    UserType = "Member"
+                    
+                };
+                context.NetUsers.InsertOnSubmit(user);
+                context.SubmitChanges();
+                int generatedUserId = user.UserID;
                 Member newMember = new Member
                 {
-                    Member_UserID = userId,
+                    Member_UserID = generatedUserId,
                     MemberFirstName = firstname,
                     MemberLastName = lastname,
                     MemberDateJoined = today,
@@ -95,6 +134,9 @@ namespace KarateSchool
                 context.Members.InsertOnSubmit(newMember);
                 context.SubmitChanges();
                 LoadMembers();
+                ClearAddMember();
+                string script = "alert('Member Added');";
+                ClientScript.RegisterStartupScript(this.GetType(), "MessageBox", script, true);
             }
             
 
@@ -110,18 +152,29 @@ namespace KarateSchool
             using (context = new KarateSchoolDataContext(connString))
             {
                 // Retrieve the entity to be deleted
-                var entityToDelete = context.Members.SingleOrDefault(x => x.Member_UserID == primaryKeyValue);
-
-                if (entityToDelete != null)
+                var entitiesToDelete1 = context.Sections.Where(x => x.Member_ID == primaryKeyValue).ToList();
+                var entityToDelete2 = context.Members.SingleOrDefault(x => x.Member_UserID == primaryKeyValue);
+                var entityToDelete3 = context.NetUsers.SingleOrDefault(x => x.UserID == primaryKeyValue);
+                if (entitiesToDelete1.Count() > 0)
+                {
+                    context.Sections.DeleteAllOnSubmit(entitiesToDelete1);
+                    context.SubmitChanges();
+                }
+                if (entityToDelete2 != null)
                 {
                     // Remove the entity from the DataContext
-                    context.Members.DeleteOnSubmit(entityToDelete);
+                   
+                    context.Members.DeleteOnSubmit(entityToDelete2);
+                    context.NetUsers.DeleteOnSubmit(entityToDelete3);
 
                     // Save changes to the database
                     context.SubmitChanges();
 
                     // Rebind the GridView to refresh the data
-                    GridView3.DataBind();
+                   
+                    LoadMembers();
+                    string script = "alert('Member Deleted');";
+                    ClientScript.RegisterStartupScript(this.GetType(), "MessageBox", script, true);
                 }
             }
         }
@@ -129,48 +182,69 @@ namespace KarateSchool
 
         protected void btnAssignMember_Click(object sender, EventArgs e)
         {
-
-            string sectionName = RadioButtonList1.SelectedValue;
-            int memid = Convert.ToInt32(assignMemId.Text.Trim());
-            int instructorid = Convert.ToInt32((assignInstructorId.Text.Trim()));  
-            decimal sectionfee = Convert.ToDecimal(SectionFee.Text.Trim());
-            DateTime today = DateTime.Now;
-            Section newSection = new Section
+            using (context = new KarateSchoolDataContext(connString))
             {
-                SectionName = sectionName,
-                SectionStartDate = today,
-                Instructor_ID = instructorid,
-                Member_ID   = memid,
-                SectionFee = sectionfee
+                string sectionName = RadioButtonList1.SelectedValue;
+                int memid = Convert.ToInt32(assignMemId.Text.Trim());
+                int instructorid = Convert.ToInt32((assignInstructorId.Text.Trim()));
+                decimal sectionfee = Convert.ToDecimal(SectionFee.Text.Trim());
+                DateTime today = DateTime.Now;
+                Section newSection = new Section
+                {
+                    SectionName = sectionName,
+                    SectionStartDate = today,
+                    Instructor_ID = instructorid,
+                    Member_ID = memid,
+                    SectionFee = sectionfee
 
-            };
+                };
 
-            context.Sections.InsertOnSubmit(newSection);
-            context.SubmitChanges();
-            
+                context.Sections.InsertOnSubmit(newSection);
+                context.SubmitChanges();
+                ClearAssign();
+                string script = "alert('Section Assignment Completed');";
+                ClientScript.RegisterStartupScript(this.GetType(), "MessageBox", script, true);
+
+            }
         }
     
 
         protected void btnAddInstructor_Click(object sender, EventArgs e)
         {
 
-            int userId = Convert.ToInt32(InstID.Text.Trim());
-            string firstname =  InstFirst.Text.Trim();
-            string lastname = InstLast.Text.Trim();
-            DateTime today = DateTime.Now;
-            string phonenumber = InstPhone.Text.Trim();
-            Instructor newInstructor = new Instructor
+            using (context = new KarateSchoolDataContext(connString))
             {
-                InstructorID = userId,
-                InstructorFirstName = firstname,
-                InstructorLastName = lastname,
-                InstructorPhoneNumber = phonenumber
+                string firstname = InstFirst.Text.Trim();
+                string lastname = InstLast.Text.Trim();
+                DateTime today = DateTime.Now;
+                string phonenumber = InstPhone.Text.Trim();
+                string username = InstUsername.Text.Trim();
+                string password = InstPassword.Text.Trim();
+                NetUser user = new NetUser
+                {
+                    UserName = username,
+                    UserPassword = password,
+                    UserType = "Instructor"
+                };
+                context.NetUsers.InsertOnSubmit(user);
+                context.SubmitChanges();
+                int generatedUserId = user.UserID;
+                Instructor newInstructor = new Instructor
+                {
+                    InstructorID = generatedUserId,
+                    InstructorFirstName = firstname,
+                    InstructorLastName = lastname,
+                    InstructorPhoneNumber = phonenumber
 
-            };
+                };
 
-            context.Instructors.InsertOnSubmit(newInstructor);
-            context.SubmitChanges();
-            LoadInstructors();
+                context.Instructors.InsertOnSubmit(newInstructor);
+                context.SubmitChanges();
+                LoadInstructors();
+                ClearAddInstructor();
+                string script = "alert('Add Instructor Completed');";
+                ClientScript.RegisterStartupScript(this.GetType(), "MessageBox", script, true);
+            }
         }
 
        
@@ -183,21 +257,49 @@ namespace KarateSchool
             // Assuming you have a data context called YourDataContext
             using (context = new KarateSchoolDataContext(connString))
             {
-                // Retrieve the entity to be deleted
-                var entityToDelete = context.Instructors.SingleOrDefault(x => x.InstructorID == primaryKeyValue);
+                var entitiesToDelete1 = context.Sections.Where(x => x.Member_ID == primaryKeyValue).ToList();
+                var entityToDelete2 = context.Instructors.SingleOrDefault(x => x.InstructorID == primaryKeyValue);
+                var entityToDelete3 = context.NetUsers.SingleOrDefault(x => x.UserID == primaryKeyValue);
 
-                if (entityToDelete != null)
+                if (entitiesToDelete1.Count() > 0 )
+                {
+                    context.Sections.DeleteAllOnSubmit(entitiesToDelete1);
+                    context.SubmitChanges();
+                }
+
+                if (entityToDelete2 != null)
                 {
                     // Remove the entity from the DataContext
-                    context.Instructors.DeleteOnSubmit(entityToDelete);
+                    
+                    context.Instructors.DeleteOnSubmit(entityToDelete2);
+                    context.NetUsers.DeleteOnSubmit(entityToDelete3);
 
                     // Save changes to the database
                     context.SubmitChanges();
 
                     // Rebind the GridView to refresh the data
-                    GridView3.DataBind();
+                    
+                    LoadInstructors();
+                    string script = "alert('Instructor Deleted');";
+                    ClientScript.RegisterStartupScript(this.GetType(), "MessageBox", script, true);
                 }
+
             }
+        }
+
+        protected void btnAddMemClear_Click(object sender, EventArgs e)
+        {
+            ClearAddMember();
+        }
+
+        protected void btnAddInstructorClear_Click(object sender, EventArgs e)
+        {
+            ClearAddInstructor();
+        }
+
+        protected void btnAssignMemClear_Click(object sender, EventArgs e)
+        {
+            ClearAssign();
         }
     }
     

@@ -24,22 +24,22 @@ namespace KarateSchool
         protected global::System.Web.UI.WebControls.GridView GridView3;
 
         /// <summary>
-        /// MemID control.
+        /// MemUsername control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox MemID;
+        protected global::System.Web.UI.WebControls.TextBox MemUsername;
 
         /// <summary>
-        /// RequiredFieldValidator1 control.
+        /// MemPassword control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
+        protected global::System.Web.UI.WebControls.TextBox MemPassword;
 
         /// <summary>
         /// MemFirstName control.
@@ -87,6 +87,15 @@ namespace KarateSchool
         protected global::System.Web.UI.WebControls.Button btnAddMember;
 
         /// <summary>
+        /// btnAddMemClear control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAddMemClear;
+
+        /// <summary>
         /// RadioButtonList1 control.
         /// </summary>
         /// <remarks>
@@ -132,6 +141,15 @@ namespace KarateSchool
         protected global::System.Web.UI.WebControls.Button btnAssignMember;
 
         /// <summary>
+        /// btnAssignMemClear control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAssignMemClear;
+
+        /// <summary>
         /// GridView2 control.
         /// </summary>
         /// <remarks>
@@ -141,13 +159,22 @@ namespace KarateSchool
         protected global::System.Web.UI.WebControls.GridView GridView2;
 
         /// <summary>
-        /// InstID control.
+        /// InstUsername control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox InstID;
+        protected global::System.Web.UI.WebControls.TextBox InstUsername;
+
+        /// <summary>
+        /// InstPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox InstPassword;
 
         /// <summary>
         /// InstFirst control.
@@ -184,5 +211,14 @@ namespace KarateSchool
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAddInstructor;
+
+        /// <summary>
+        /// btnAddInstructorClear control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAddInstructorClear;
     }
 }
