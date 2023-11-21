@@ -50,7 +50,7 @@ namespace KarateSchool
                     {
                         var admin = context.Instructors.SingleOrDefault(a => a.InstructorID == user.UserID);
 
-                        Response.Redirect("mywork/Administrator.aspx", true);
+                        Response.Redirect("Administrator.aspx", true);
                     }
 
                 }
